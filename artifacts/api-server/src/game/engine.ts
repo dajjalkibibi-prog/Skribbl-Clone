@@ -609,6 +609,7 @@ export function setupSocketIO(server: HttpServer) {
                 .filter(w => w.length >= 1 && w.length <= 32);
             }
             startGame(io, room);
+            void logActivity(socketIp(socket), player.name, 'game_started', `room ${room.id} | ${room.players.length} players`);
             break;
           }
 
@@ -664,6 +665,7 @@ export function setupSocketIO(server: HttpServer) {
               if (norm === wordNorm) {
                 player.guessed = true;
                 room.guessedCount++;
+                void logActivity(socketIp(socket), player.name, 'guessed', `"${room.currentWord}" in room ${room.id}`);
 
                 const drawTime = room.settings[SETI.DRAWTIME] || 80;
                 const ratio    = Math.max(0, room.timeLeft) / drawTime;
